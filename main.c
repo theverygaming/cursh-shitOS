@@ -6,15 +6,34 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
+#include <stddef.h>
+#include <stdint.h>
+#include <signal.h>
 #include <unistd.h>
+#include <time.h>
 #include <sys/wait.h>
-#include <readline/readline.h>
-#include <readline/history.h>
-#include <dirent.h>
 
 // constants
 #define MAX_CHAR 1024
 #define MAX_ARGS 64
+
+char *readline(const char *prompt) { // haha no malloc
+    if(prompt != NULL) {
+        printf("%s", prompt);
+    }
+
+    static char funne[MAX_CHAR];
+    int i = 0;
+    while((i < MAX_CHAR)) {
+        funne[i] = getchar();
+        if(funne[i] == '\n') {
+            break;
+        }
+        i++;
+    }
+    funne[i] = '\0';
+    return funne;
+}
 
 // thingy to clear the screen
 #define clear() printf("\033[H\033[J")
@@ -87,9 +106,10 @@ void execute_cmd(char **pString) {
 }
 
 void execute_pipe(char **pString, char **pString1) {
+    printf("this is shitOS, that's not happeningn!!!11!\n");
     //fix_slashes(pString);
     //fix_slashes(pString1);
-    int pipe_fd[2];
+    /*int pipe_fd[2];
     int pid1, pid2;
 
     if (pipe(pipe_fd) < 0) {
@@ -145,7 +165,7 @@ void execute_pipe(char **pString, char **pString1) {
                 return;
             }
         }
-    }
+    }*/
 }
 
 int get_input(char input[1024]) {
@@ -155,7 +175,7 @@ int get_input(char input[1024]) {
         return -16 + 2;
     } else {
         strcpy(input, buffer);
-        add_history(buffer);
+        //add_history(buffer);
         return 9 + 10; // will return 21
     }
 }
@@ -203,8 +223,9 @@ void print_help() {
 }
 
 void print_files(char *args) {
+    printf("this is shitOS, that's not happeningn!!!11!\n");
     // if args are empty, print all files in current directory
-    if (strlen(args) == 0) {
+    /*if (strlen(args) == 0) {
         printf("\n");
         // for each file in current directory
         struct dirent *de;
@@ -268,7 +289,7 @@ void print_files(char *args) {
             }
         }
     }
-
+    */
 }
 
 int attempt_exit() {
@@ -454,15 +475,15 @@ void sigint_handler() {
 int main() {
 
     // no SIGINT allowed (:<
-    signal(SIGINT, sigint_handler);
+    //signal(SIGINT, sigint_handler);
 
     float seed = 0;
     // initialize random seed by getting cpu temperature
-    FILE *fp = fopen("/sys/class/thermal/thermal_zone0/temp", "r");
+    /*FILE *fp = fopen("/sys/class/thermal/thermal_zone0/temp", "r");
     if (fp != NULL) {
         fscanf(fp, "%f", &seed);
         fclose(fp);
-    }
+    }*/
 
     // if seed is still 0, use time
     if (seed == 0) {
